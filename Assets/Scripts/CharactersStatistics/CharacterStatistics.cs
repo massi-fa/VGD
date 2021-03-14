@@ -21,30 +21,15 @@ public class CharacterStatistics : MonoBehaviour
     }
 
 
-    /*private void Update()
+  /*  private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
             StartCoroutine(TemporaneousDamageBuff(100, 10));
         else if (Input.GetKeyDown(KeyCode.R))
                 StartCoroutine(TemporaneousArmourBuff(100, 10));
-            else if (Input.GetKeyDown(KeyCode.Y))
-            TakeDamage(10);
     }*/
 
-    public void TakeDamage(int damage) {
-        // scala il danno preso in base all'armatura del personaggio
-        damage -= armour;
-        // se il danno è non positivo, lo setto a un minimo di 1
-        if (damage <= 0)
-            damage = 1;
 
-        // Scalo gli hp in baso al danno preso
-        hp -= damage;
-
-        // Se gli hp sono non positivi, lancio la gestione della morte
-        if (hp <= 0)
-            Die();
-    }
 
     #region FixedBuffs
     public void TakeHitPoints(int bonus_hp) {
@@ -84,9 +69,4 @@ public class CharacterStatistics : MonoBehaviour
     }
 
     #endregion
-
-    public virtual void Die() { 
-        // La morte cambia a seconda del character
-        // bisognerà fare l'override del metodo
-    }
 }
