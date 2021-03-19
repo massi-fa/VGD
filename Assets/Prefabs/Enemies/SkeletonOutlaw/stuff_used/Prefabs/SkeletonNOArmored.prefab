@@ -286,6 +286,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4052243655771156}
   - component: {fileID: 137732535158581010}
+  - component: {fileID: 8331548786129323018}
   m_Layer: 0
   m_Name: Axe00_Right
   m_TagString: Untagged
@@ -416,6 +417,21 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.9304377, y: 1.5924478, z: 0.65058804}
     m_Extent: {x: 0.09660038, y: 0.4788707, z: 0.9174366}
   m_DirtyAABB: 0
+--- !u!114 &8331548786129323018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120311153692430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42aec4ea95dd64f49b8458d50a2379be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameCharacterController: {fileID: 0}
+  rootParent: {fileID: 0}
+  validTags: []
 --- !u!1 &1122326106864100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1824,6 +1840,7 @@ GameObject:
   - component: {fileID: 4930333307789410}
   - component: {fileID: 33166748305104998}
   - component: {fileID: 23744538295011362}
+  - component: {fileID: 5314683475160257628}
   m_Layer: 0
   m_Name: Axe00_Left
   m_TagString: Untagged
@@ -1894,6 +1911,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5314683475160257628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677803223805150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42aec4ea95dd64f49b8458d50a2379be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameCharacterController: {fileID: 0}
+  rootParent: {fileID: 0}
+  validTags: []
 --- !u!1 &1683459389397140
 GameObject:
   m_ObjectHideFlags: 0
@@ -2244,6 +2276,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4860190980791512}
   - component: {fileID: 95301192991383472}
+  - component: {fileID: 894794752351087633}
+  - component: {fileID: 3558882809361489401}
+  - component: {fileID: 2232777053063639185}
   m_Layer: 0
   m_Name: SkeletonNOArmored
   m_TagString: Enemy
@@ -2288,6 +2323,53 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &894794752351087633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849936960482616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1cd0edf25307d546aebf0655b46c958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAttackable: 1
+  flashWhenAttacked: 1
+  lookRadius: 10
+--- !u!114 &3558882809361489401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849936960482616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da40d172ee367e649bb288870950e019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 25
+  baseArmour: 0
+  baseDamage: 5
+  hp: 0
+  armour: 0
+  damage: 0
+--- !u!114 &2232777053063639185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849936960482616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ab71b2a656c49d44b3d852683768e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newColor: {r: 1, g: 0, b: 0, a: 1}
+  timeBeforeResetttingColor: 0.3
 --- !u!1 &1851628079018304
 GameObject:
   m_ObjectHideFlags: 0

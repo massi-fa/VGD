@@ -38,7 +38,7 @@ public class CollectibleController : MonoBehaviour
         {
 
             // Attiva l'evento del collezionabile
-            CharacterStatistics c = other.gameObject.GetComponent<CharacterStatistics>();
+            var c = other.gameObject.GetComponent<CharacterStatistics>();
             foreach (var renderer in gameObject.GetComponentsInChildren<Renderer>())
             {
                 renderer.enabled = false;

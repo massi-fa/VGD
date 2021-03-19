@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
 public class MeleeWeapon : MonoBehaviour
 {
-    public GameCharacterController gameCharacterController;
-    public GameObject rootParent;
-    public string[] validTags;
+    internal GameCharacterController gameCharacterController;
+    private GameObject rootParent;
+    protected internal string[] validTags;
 
     private void Start()
     {
@@ -19,11 +16,13 @@ public class MeleeWeapon : MonoBehaviour
         rootParent = parent;
         gameCharacterController = rootParent.GetComponent<GameCharacterController>();
 
-        //print("Io sono l'arma " + gameObject.name + " di " + characterGameObject.name + " con tag " + characterGameObject.tag);
         if (rootParent.CompareTag("Player"))
             validTags = new [] { "Enemy", "mechanism" };
         else if (rootParent.CompareTag("Enemy"))
-            validTags = new string[] { "Player" };
+            validTags = new [] { "Player" };
+        else if (rootParent.CompareTag("Trap"))
+            validTags = new [] { "Player" };
+
     }
 
 }

@@ -50,12 +50,15 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Controllers\Collectible\CollectibleRotation.cs" />
+     <Compile Include="Assets\Scripts\Support\RotateGameObject.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\EnemyStatistics.cs" />
      <Compile Include="Assets\Scripts\AnimatorExtraBehaviours\Protagonist\ProtagonistIdleExtraBehaviour.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Trap\TrapController.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\CharacterStatistics.cs" />
+     <Compile Include="Assets\Scripts\CharactersStatistics\TrapStatistics.cs" />
      <Compile Include="Assets\Scripts\AnimatorExtraBehaviours\Protagonist\ProtagonistAttack01ExtraBehaviour.cs" />
      <Compile Include="Assets\Scripts\Controllers\Collectible\CollectibleController.cs" />
+     <Compile Include="Assets\Scripts\Support\PushPlayer.cs" />
      <Compile Include="Assets\Scripts\Controllers\CharacterCollisionController.cs" />
      <Compile Include="Assets\Scripts\Support\ChangeColorMaterialTemporary.cs" />
      <Compile Include="Assets\Scripts\Support\MeleeWeapon.cs" />

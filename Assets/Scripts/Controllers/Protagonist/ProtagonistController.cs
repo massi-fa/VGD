@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
 public class ProtagonistController : GameCharacterController
 {
-    CharacterController controller;
-    Transform groundCheckTransform;
+    private CharacterController controller;
+    private Transform groundCheckTransform;
 
     public float velocity = 6f;
     public float gravity = -9.81f;
@@ -19,26 +16,27 @@ public class ProtagonistController : GameCharacterController
     public float jumpHeight = 3f;
 
     public Vector3 verticalVelocityVector;
-    bool isGrounded;
+    private bool isGrounded;
+    
+    private static readonly int IsDefending = Animator.StringToHash("isDefending");
+    private static readonly int ClickedForTheNextAttack = Animator.StringToHash("clickedForTheNextAttack");
 
 
     // Start is called before the first frame update
-    private void Start()
+    protected override void Start()
     {
-        animator = GetComponent<Animator>();
-        myStats = GetComponent<CharacterStatistics>();
+        base.Start();
 
         controller = GetComponent<CharacterController>();
         groundCheckTransform = transform.Find("GroundCheck");
 
-
-
+        
         // Aggiusta l'altezza iniziale del character controller
         float correctHeight = controller.center.y + controller.skinWidth;
         controller.center = new Vector3(0, correctHeight, 0);
     }
 
-    public override void ManageMovement()
+    protected override void ManageMovement()
     {
         base.ManageMovement();
 
@@ -53,7 +51,7 @@ public class ProtagonistController : GameCharacterController
         // se esiste questa direzione (il pg non è fermo)
         if (direction.magnitude > 0f)
         {
-            animator.SetBool("isWalking", true);
+            animator.SetBool(IsMoving, true);
 
             // calcolo l'angolo tra il forward e la direzione in cui voglio andare e lo converto da radianti a gradi
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
@@ -67,13 +65,13 @@ public class ProtagonistController : GameCharacterController
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z)), Time.deltaTime * 5f);
             // applico il movimento
             Vector3 moveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
-            controller.Move(moveDirection.normalized * velocity * Time.deltaTime);
+            controller.Move(moveDirection.normalized * (velocity * Time.deltaTime));
         }
         else
-            animator.SetBool("isWalking", false);
+            animator.SetBool(IsMoving, false);
     }
 
-    public override void ManageJumpAndGravity()
+    protected override void ManageJumpAndGravity()
     {
         base.ManageJumpAndGravity();
 
@@ -103,40 +101,28 @@ public class ProtagonistController : GameCharacterController
         controller.Move(verticalVelocityVector * Time.deltaTime);
     }
 
-    public override void ManageAttack()
+    protected override void ManageAttack()
     {
         base.ManageAttack();
 
         bool wantToAttack = Input.GetButtonDown("Fire1");
 
-        if (wantToAttack)
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Attack00"))
-                animator.SetBool("clickedForTheNextAttack", true);
-            else
-                animator.SetBool("isAttacking", true);
-        }
+        if (!wantToAttack) return;
+
+        animator.SetBool(
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Attack00") ? ClickedForTheNextAttack : IsAttacking, 
+            true);
     }
 
-    public override void ManageDefence()
+    protected override void ManageDefence()
     {
         base.ManageDefence();
 
         bool wantToDefend = Input.GetButtonDown("Fire2");
-        animator.SetBool("isDefending", wantToDefend);
+        animator.SetBool(IsDefending, wantToDefend);
     }
 
-    public override void TargetTouched(string weaponName, GameObject target)
-    {
-        base.TargetTouched(weaponName, target);
-    }
-
-    public override void TakeDamage(int damage)
-    {
-        base.TakeDamage(damage);
-    }
-
-    public override void Die()
+    protected override void Die()
     {
         base.Die();
 

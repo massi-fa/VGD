@@ -13,7 +13,7 @@ public class CharacterStatistics : MonoBehaviour
     public int armour;
     public int damage;
 
-    public void Start()
+    protected virtual void Start()
     {
         hp = maxHp;
         armour = baseArmour;
@@ -28,8 +28,7 @@ public class CharacterStatistics : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.R))
                 StartCoroutine(TemporaneousArmourBuff(100, 10));
     }*/
-
-
+  
 
     #region FixedBuffs
     public void TakeHitPoints(int bonus_hp) {
@@ -61,12 +60,5 @@ public class CharacterStatistics : MonoBehaviour
         yield return Waiter.Active(seconds);
         armour -= bonus_armour;
     }
-
-    public IEnumerator Test(int i, int s)
-    {
-        yield return new WaitForSeconds(s);
-        UpgradeArmour(-i);
-    }
-
     #endregion
 }

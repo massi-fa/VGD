@@ -8,6 +8,7 @@ TagManager:
   - GroundCheck
   - Enemy
   - Collectible
+  - Trap
   layers:
   - Default
   - TransparentFX

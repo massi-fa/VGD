@@ -502,7 +502,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cd0edf25307d546aebf0655b46c958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lastAnimationName: 
+  lastWeaponUsedName: 
+  lastTargetName: 
+  lastAttackTime: 0
+  countdownAttack: 1
+  flashWhenHit: 1
+  isAnimated: 1
   lookRadius: 10
+  playerTransform: {fileID: 0}
+  originalPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &49231257141866617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2019,9 +2028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42aec4ea95dd64f49b8458d50a2379be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameCharacterController: {fileID: 0}
-  rootParent: {fileID: 0}
-  validTags: []
 --- !u!1 &48163598558521578
 GameObject:
   m_ObjectHideFlags: 0
@@ -2748,9 +2754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42aec4ea95dd64f49b8458d50a2379be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameCharacterController: {fileID: 0}
-  rootParent: {fileID: 0}
-  validTags: []
 --- !u!1 &48728618355215976
 GameObject:
   m_ObjectHideFlags: 0

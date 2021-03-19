@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 public class CharacterCollisionController : MonoBehaviour
 {
@@ -10,19 +8,13 @@ public class CharacterCollisionController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-       // print("Protagonist hitF #1");
         if (other == null || other.gameObject == null)
             return;
-        
-     //   print("Protagonist hitF #2");
-        enemyWeapon = other.gameObject.GetComponent<MeleeWeapon>();
-        if (enemyWeapon == null  || !enemyWeapon.validTags.Contains(gameObject.tag))
-            return;
-        
-        
-      //  print("Protagonist hitF #3");
-        
-        enemyWeapon.rootParent.GetComponent<GameCharacterController>().TargetTouched(enemyWeapon.name, gameObject);
 
+        enemyWeapon = other.gameObject.GetComponent<MeleeWeapon>();
+        if (enemyWeapon != null && enemyWeapon.validTags.Contains(gameObject.tag))
+        {
+            enemyWeapon.gameCharacterController.TargetTouched(enemyWeapon.name, gameObject);
+        }
     }
 }
