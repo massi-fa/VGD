@@ -1,14 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProtagonistAttack01ExtraBehaviour : StateMachineBehaviour
 {
+    private static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+    private static readonly int ClickedForTheNextAttack = Animator.StringToHash("clickedForTheNextAttack");
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool("isAttacking", true);
-        animator.SetBool("clickedForTheNextAttack", false);
+        animator.SetBool(IsAttacking, true);
+        animator.SetBool(ClickedForTheNextAttack, false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

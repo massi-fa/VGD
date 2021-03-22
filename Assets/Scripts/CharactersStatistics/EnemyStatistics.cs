@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class EnemyStatistics : CharacterStatistics
+﻿public class EnemyStatistics : CharacterStatistics
 {
 
 }

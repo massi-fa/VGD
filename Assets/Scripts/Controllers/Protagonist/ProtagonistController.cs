@@ -2,8 +2,8 @@
 
 public class ProtagonistController : GameCharacterController
 {
-    private CharacterController controller;
-    private Transform groundCheckTransform;
+    private CharacterController _controller;
+    private Transform _groundCheckTransform;
 
     public float velocity = 6f;
     public float gravity = -9.81f;
@@ -16,7 +16,7 @@ public class ProtagonistController : GameCharacterController
     public float jumpHeight = 3f;
 
     public Vector3 verticalVelocityVector;
-    private bool isGrounded;
+    private bool _isGrounded;
     
     private static readonly int IsDefending = Animator.StringToHash("isDefending");
     private static readonly int ClickedForTheNextAttack = Animator.StringToHash("clickedForTheNextAttack");
@@ -27,13 +27,13 @@ public class ProtagonistController : GameCharacterController
     {
         base.Start();
 
-        controller = GetComponent<CharacterController>();
-        groundCheckTransform = transform.Find("GroundCheck");
+        _controller = GetComponent<CharacterController>();
+        _groundCheckTransform = transform.Find("GroundCheck");
 
         
         // Aggiusta l'altezza iniziale del character controller
-        float correctHeight = controller.center.y + controller.skinWidth;
-        controller.center = new Vector3(0, correctHeight, 0);
+        float correctHeight = _controller.center.y + _controller.skinWidth;
+        _controller.center = new Vector3(0, correctHeight, 0);
     }
 
     protected override void ManageMovement()
@@ -65,7 +65,7 @@ public class ProtagonistController : GameCharacterController
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z)), Time.deltaTime * 5f);
             // applico il movimento
             Vector3 moveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
-            controller.Move(moveDirection.normalized * (velocity * Time.deltaTime));
+            _controller.Move(moveDirection.normalized * (velocity * Time.deltaTime));
         }
         else
             animator.SetBool(IsMoving, false);
@@ -76,19 +76,19 @@ public class ProtagonistController : GameCharacterController
         base.ManageJumpAndGravity();
 
         // Calcola se il pg è a terra
-        isGrounded = Physics.CheckSphere(groundCheckTransform.position, groundDistance, layerToCheck);
+        _isGrounded = Physics.CheckSphere(_groundCheckTransform.position, groundDistance, layerToCheck);
         // Controllo input utente per saltare
         bool wantToJump = Input.GetButtonDown("Jump");
 
         // Se il pg è a terra e il vettore velocità non è stato resettato
-        if (isGrounded && verticalVelocityVector.y < 0f)
+        if (_isGrounded && verticalVelocityVector.y < 0f)
         {
             // resetto il vettore velocità
             verticalVelocityVector.y = -0.05f;
         }
 
         // Se l'utente vuole saltare e se il pg è a terra
-        if (wantToJump && isGrounded)
+        if (wantToJump && _isGrounded)
         {
             // aggiorno il vetotre velocità
             verticalVelocityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -98,7 +98,7 @@ public class ProtagonistController : GameCharacterController
         verticalVelocityVector.y += 2 * gravity * Time.deltaTime;
 
         // Aggiorno la posizione del pg
-        controller.Move(verticalVelocityVector * Time.deltaTime);
+        _controller.Move(verticalVelocityVector * Time.deltaTime);
     }
 
     protected override void ManageAttack()

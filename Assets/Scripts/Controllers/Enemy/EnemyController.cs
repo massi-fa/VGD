@@ -8,13 +8,13 @@ namespace Controllers.Enemy
 
         public float lookRadius = 10f;
 
-        private NavMeshAgent navigationMeshAgent;
-        private NavMeshPath navMeshPath;
+        private NavMeshAgent _navigationMeshAgent;
+        private NavMeshPath _navMeshPath;
         public Transform playerTransform;
 
         public Vector3 originalPosition;
 
-        private float deadAnimationTime;
+        private float _deadAnimationTime;
     
 
         // Start is called before the first frame update
@@ -22,30 +22,29 @@ namespace Controllers.Enemy
         {
             base.Start();
 
+            // I nemici flashano se colpiti
             flashWhenHit = true;
         
-            navigationMeshAgent = GetComponent<NavMeshAgent>();
-            navMeshPath = new NavMeshPath();
+            // Inizializza nav agent variable e crea un nuovo nev mesh path
+            _navigationMeshAgent = GetComponent<NavMeshAgent>();
+            _navMeshPath = new NavMeshPath();
         
+            // Traccio il player
             playerTransform = PlayerTracker.instance.player.transform;
+            
+            // Controllo la distanza da terra per approssimare la posizione originale
             originalPosition = transform.position;
-
-            //
-            RaycastHit hit;
-            if (Physics.Raycast (transform.position, Vector3.down, out hit, 100, LayerMask.GetMask("Ground"))) {
+            if (Physics.Raycast (transform.position, Vector3.down, out var hit, 100, LayerMask.GetMask("Ground"))) {
                 var distanceToGround = hit.distance;
                 originalPosition.y -= distanceToGround;
             }
-            //
-            //print("transform.position " + transform.position );
-            // print("originalPosition " + originalPosition );
-
-
+            
+            // Calcola ora quanto dura la lunghezza della clip di morte
             var clips = animator.runtimeAnimatorController.animationClips;
             foreach (var clip in clips)
             {
                 if (clip.name.Contains("Dead"))
-                    deadAnimationTime = clip.length;
+                    _deadAnimationTime = clip.length;
             }
         }
 
@@ -54,30 +53,28 @@ namespace Controllers.Enemy
             base.ManageMovement();
 
             // distanza fra il nemico e il player
-            float distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            var distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
             // se il nemico vede il player
             if (distanceFromPlayer <= lookRadius
-                && navigationMeshAgent.CalculatePath(playerTransform.position, navMeshPath)
-                && navMeshPath.status == NavMeshPathStatus.PathComplete)
+                && _navigationMeshAgent.CalculatePath(playerTransform.position, _navMeshPath)
+                && _navMeshPath.status == NavMeshPathStatus.PathComplete)
             {
         
                 // il nemico viene aggrato
-                navigationMeshAgent.SetPath(navMeshPath);
+                _navigationMeshAgent.SetPath(_navMeshPath);
                 animator.SetBool(IsMoving, true);
         
             }
             // altrimenti se non lo vede
             else
             {
-                // print("transform.position" + transform.position);
-                // print("position " + originalPosition);
                 // Se è lontano al punto originale
                 if (Vector3.Distance(transform.position, originalPosition) > 2.0f)
                 {
                     // Torna al punto originale
                     animator.SetBool(IsMoving, true);
-                    navigationMeshAgent.SetDestination(originalPosition);
+                    _navigationMeshAgent.SetDestination(originalPosition);
                 }
                 // Altrimenti sta fermo
                 else
@@ -93,10 +90,10 @@ namespace Controllers.Enemy
             base.ManageAttack();
 
             // distanza fra il nemico e il player
-            float distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            var distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
             // se il nemico è abbastanza vicino
-            if (distanceFromPlayer <= navigationMeshAgent.stoppingDistance)
+            if (distanceFromPlayer <= _navigationMeshAgent.stoppingDistance)
             {
                 // smette di muoversi
                 animator.SetBool(IsMoving, false);
@@ -116,10 +113,9 @@ namespace Controllers.Enemy
         private void FacePlayer()
         {
             // ricavo la direzione verso il player
-            Vector3 direction = (playerTransform.position - transform.position).normalized;
+            var direction = (playerTransform.position - transform.position).normalized;
             // trova la rotazione che deve fare per guardare il player
-            // Quaternion lookRotation = Quaternion.LookRotation(direction)
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+            var lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
             // applica quella rotazione in maniera più smooth
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         }
@@ -135,7 +131,7 @@ namespace Controllers.Enemy
             //changeColorMaterial.ResetColor();
 
             // Distruggi il gameobject
-            Destroy(gameObject,deadAnimationTime);
+            Destroy(gameObject,_deadAnimationTime);
         }
 
         #region EnemyVisionOnEditor

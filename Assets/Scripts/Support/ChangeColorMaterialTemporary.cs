@@ -9,23 +9,23 @@ public class ChangeColorMaterialTemporary : MonoBehaviour
     public float timeBeforeResetttingColor = 0.2f;
     
     // riferimento ai renderer dei figli
-    private Renderer[] currentRenderers;
+    private Renderer[] _currentRenderers;
     
     // copai dei materiali originali (primo materiale di ogni renderer)
-    private Material[] originalFirstMaterial;
+    private Material[] _originalFirstMaterial;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // trova i renderers dei figli
-        currentRenderers = GetComponentsInChildren<Renderer>();
+        _currentRenderers = GetComponentsInChildren<Renderer>();
         
         // crea una copia del primo materiale di ogni figlio
         // e lo salva nel vettore
-        originalFirstMaterial = new Material[currentRenderers.Length];
-        for (int i = 0; i < currentRenderers.Length; i++)
+        _originalFirstMaterial = new Material[_currentRenderers.Length];
+        for (var i = 0; i < _currentRenderers.Length; i++)
         {
-            originalFirstMaterial[i] = new Material(currentRenderers[i].material);
+            _originalFirstMaterial[i] = new Material(_currentRenderers[i].material);
         }
     }
 
@@ -33,22 +33,22 @@ public class ChangeColorMaterialTemporary : MonoBehaviour
     {
         // Cambia il colore di ogni renderer 
         // nel colore settato dall'editor (red di default)
-        foreach (Renderer rend in currentRenderers)
+        foreach (Renderer rend in _currentRenderers)
         {
             rend.material.color = newColor;
         }
         
         // Invoca il resetcolor dopo <timeBeforeResetttingColor> secondi
-        Invoke("ResetColor", timeBeforeResetttingColor);
+        Invoke(nameof(ResetColor), timeBeforeResetttingColor);
     }
 
     public void ResetColor()
     {
         // Resetta il colore di ogni renderer
         // nel colore originale
-        for (int i = 0; i < currentRenderers.Length; i++)
+        for (var i = 0; i < _currentRenderers.Length; i++)
         {
-            currentRenderers[i].material.color = originalFirstMaterial[i].color;
+            _currentRenderers[i].material.color = _originalFirstMaterial[i].color;
         }
     }
 }

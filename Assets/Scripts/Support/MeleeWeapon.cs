@@ -3,7 +3,7 @@
 public class MeleeWeapon : MonoBehaviour
 {
     internal GameCharacterController gameCharacterController;
-    private GameObject rootParent;
+    private GameObject _rootParent;
     protected internal string[] validTags;
 
     private void Start()
@@ -13,14 +13,14 @@ public class MeleeWeapon : MonoBehaviour
         while (parent != null && parent.CompareTag("Untagged")) 
             parent = parent.transform.parent.gameObject;
         
-        rootParent = parent;
-        gameCharacterController = rootParent.GetComponent<GameCharacterController>();
+        _rootParent = parent;
+        gameCharacterController = _rootParent.GetComponent<GameCharacterController>();
 
-        if (rootParent.CompareTag("Player"))
+        if (_rootParent.CompareTag("Player"))
             validTags = new [] { "Enemy", "mechanism" };
-        else if (rootParent.CompareTag("Enemy"))
+        else if (_rootParent.CompareTag("Enemy"))
             validTags = new [] { "Player" };
-        else if (rootParent.CompareTag("Trap"))
+        else if (_rootParent.CompareTag("Trap"))
             validTags = new [] { "Player" };
 
     }

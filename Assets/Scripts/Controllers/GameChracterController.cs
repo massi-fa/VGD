@@ -3,30 +3,30 @@
 public class GameCharacterController : MonoBehaviour
 {
     protected Animator animator;
-    private Animation singleAnimationInsteadOfAnimator;
-    private CharacterStatistics myStats;
+    private Animation _singleAnimationInsteadOfAnimator;
+    private CharacterStatistics _myStats;
 
-    private string lastAnimationName;
-    private   string lastWeaponUsedName;
-    private string lastTargetName;
-    private   float lastAttackTime;
+    private string _lastAnimationName;
+    private string _lastWeaponUsedName;
+    private string _lastTargetName;
+    private   float _lastAttackTime;
     public float countdownAttack = 1.0f;
 
-    private  ChangeColorMaterialTemporary changeColorMaterial;
+    private  ChangeColorMaterialTemporary _changeColorMaterial;
     
     protected  static readonly int IsAttacking = Animator.StringToHash("isAttacking");
     protected  static readonly int IsMoving = Animator.StringToHash("isMoving");
     protected  static readonly int IsDead = Animator.StringToHash("isDead");
 
-    public bool flashWhenHit = false;
+    public bool flashWhenHit;
     public bool isAnimated = true;
 
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
-        singleAnimationInsteadOfAnimator = GetComponent<Animation>();
-        myStats = GetComponent<CharacterStatistics>();
-        changeColorMaterial = GetComponent<ChangeColorMaterialTemporary>();
+        _singleAnimationInsteadOfAnimator = GetComponent<Animation>();
+        _myStats = GetComponent<CharacterStatistics>();
+        _changeColorMaterial = GetComponent<ChangeColorMaterialTemporary>();
     }
 
     protected virtual void Update()
@@ -48,20 +48,20 @@ public class GameCharacterController : MonoBehaviour
             return;
 
         // scala il danno preso in base all'armatura del personaggio
-        damage -= myStats.armour;
+        damage -= _myStats.armour;
         // se il danno è non positivo, lo setto a un minimo di 1
         if (damage <= 0)
             damage = 1;
 
         // cambio il colore
         if(flashWhenHit)
-            changeColorMaterial.FlashColor();
+            _changeColorMaterial.FlashColor();
             
         // Scalo gli hp in baso al danno preso
-        myStats.hp -= damage;
+        _myStats.hp -= damage;
 
         // Se gli hp sono non positivi, lancio la gestione della morte
-        if (myStats.hp <= 0)
+        if (_myStats.hp <= 0)
             Die();
     }
     public void TargetTouched(string myObjectPieceCollidedName, GameObject otherObject)
@@ -82,8 +82,8 @@ public class GameCharacterController : MonoBehaviour
         }
         else
         {
-            currentAnimationName = singleAnimationInsteadOfAnimator.clip.name;
-            isAttacking = singleAnimationInsteadOfAnimator.isPlaying;
+            currentAnimationName = _singleAnimationInsteadOfAnimator.clip.name;
+            isAttacking = _singleAnimationInsteadOfAnimator.isPlaying;
         }
         string currentTargetName = otherObject.name;
     /*
@@ -97,20 +97,20 @@ public class GameCharacterController : MonoBehaviour
       */  
         if (isAttacking &&
             currentAnimationName.Contains("Attack") && (
-                currentTime - lastAttackTime > countdownAttack
-                || !lastTargetName.Equals(currentTargetName)
-                || !currentAnimationName.Equals(lastAnimationName)
-                || (!myObjectPieceCollidedName.Equals(lastWeaponUsedName) && currentAnimationName.Contains("DoubleAttack"))
+                currentTime - _lastAttackTime > countdownAttack
+                || !_lastTargetName.Equals(currentTargetName)
+                || !currentAnimationName.Equals(_lastAnimationName)
+                || (!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentAnimationName.Contains("DoubleAttack"))
             )
         )
         {
             
-            lastAnimationName = currentAnimationName;
-            lastWeaponUsedName = myObjectPieceCollidedName;
-            lastTargetName = currentTargetName;
-            lastAttackTime = currentTime;
+            _lastAnimationName = currentAnimationName;
+            _lastWeaponUsedName = myObjectPieceCollidedName;
+            _lastTargetName = currentTargetName;
+            _lastAttackTime = currentTime;
             
-            animatedTarget.TakeDamage(myStats.damage);
+            animatedTarget.TakeDamage(_myStats.damage);
 
         }
     }

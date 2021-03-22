@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterStatistics : MonoBehaviour
@@ -31,34 +30,34 @@ public class CharacterStatistics : MonoBehaviour
   
 
     #region FixedBuffs
-    public void TakeHitPoints(int bonus_hp) {
-        hp += bonus_hp;
+    public void TakeHitPoints(int bonusHp) {
+        hp += bonusHp;
         if (hp > maxHp)
             hp = maxHp;
     }
 
 
-    public void UpgradeArmour(int bonus_armour) {
-        armour += bonus_armour;
+    public void UpgradeArmour(int bonusArmour) {
+        armour += bonusArmour;
     }
 
-    public void UpgradeDamage(int bonus_damange)
+    public void UpgradeDamage(int bonusDamange)
     {
-        damage += bonus_damange;
+        damage += bonusDamange;
     }
     #endregion
 
     #region TemporaneousBuffs
-    public IEnumerator TemporaneousDamageBuff(int bonus_damage, int seconds) {
-        damage += bonus_damage;
+    public IEnumerator TemporaneousDamageBuff(int bonusDamage, int seconds) {
+        damage += bonusDamage;
         yield return Waiter.Active(seconds);
-        damage -= bonus_damage;
+        damage -= bonusDamage;
     }
 
-    public IEnumerator TemporaneousArmourBuff(int bonus_armour, int seconds) {
-        armour += bonus_armour;
+    public IEnumerator TemporaneousArmourBuff(int bonusArmour, int seconds) {
+        armour += bonusArmour;
         yield return Waiter.Active(seconds);
-        armour -= bonus_armour;
+        armour -= bonusArmour;
     }
     #endregion
 }

@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 public class CharacterCollisionController : MonoBehaviour
 {
-    private MeleeWeapon enemyWeapon;
+    private MeleeWeapon _enemyWeapon;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other == null || other.gameObject == null)
             return;
 
-        enemyWeapon = other.gameObject.GetComponent<MeleeWeapon>();
-        if (enemyWeapon != null && enemyWeapon.validTags.Contains(gameObject.tag))
+        _enemyWeapon = other.gameObject.GetComponent<MeleeWeapon>();
+        if (_enemyWeapon != null && _enemyWeapon.validTags.Contains(gameObject.tag))
         {
-            enemyWeapon.gameCharacterController.TargetTouched(enemyWeapon.name, gameObject);
+            _enemyWeapon.gameCharacterController.TargetTouched(_enemyWeapon.name, gameObject);
         }
     }
 }

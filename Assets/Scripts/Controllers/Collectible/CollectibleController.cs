@@ -5,7 +5,7 @@ using UnityEngine;
 public class CollectibleController : MonoBehaviour
 {
     
-    private GameObject rootParent;
+    private GameObject _rootParent;
 
     public enum BonusType
     {
@@ -24,7 +24,7 @@ public class CollectibleController : MonoBehaviour
         while (parent != null && !parent.CompareTag("Collectible")) 
             parent = parent.transform.parent.gameObject;
 
-        rootParent = parent;
+        _rootParent = parent;
 
         if (bonusType == BonusType.Heal)
             bonusSeconds = 0;
@@ -39,9 +39,9 @@ public class CollectibleController : MonoBehaviour
 
             // Attiva l'evento del collezionabile
             var c = other.gameObject.GetComponent<CharacterStatistics>();
-            foreach (var renderer in gameObject.GetComponentsInChildren<Renderer>())
+            foreach (var myRenderer in gameObject.GetComponentsInChildren<Renderer>())
             {
-                renderer.enabled = false;
+                myRenderer.enabled = false;
             }
 
             switch (bonusType)
@@ -67,6 +67,6 @@ public class CollectibleController : MonoBehaviour
     private IEnumerator Die()
     {
         yield return Waiter.Active(bonusSeconds);
-        Destroy(rootParent);
+        Destroy(_rootParent);
     }
 }
