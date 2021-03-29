@@ -17,7 +17,7 @@ public class ProtagonistController : GameCharacterController
 
     public Vector3 verticalVelocityVector;
     private bool _isGrounded;
-    
+
     private static readonly int IsDefending = Animator.StringToHash("isDefending");
     private static readonly int ClickedForTheNextAttack = Animator.StringToHash("clickedForTheNextAttack");
 
@@ -30,7 +30,7 @@ public class ProtagonistController : GameCharacterController
         _controller = GetComponent<CharacterController>();
         _groundCheckTransform = transform.Find("GroundCheck");
 
-        
+
         // Aggiusta l'altezza iniziale del character controller
         float correctHeight = _controller.center.y + _controller.skinWidth;
         _controller.center = new Vector3(0, correctHeight, 0);
@@ -58,13 +58,15 @@ public class ProtagonistController : GameCharacterController
             // Considero anche l'angolo della telecamera
             targetAngle += eyes.transform.eulerAngles.y;
             // ci si muove graduatamente dall'angolo attuale all'angolo finale
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity,
+                turnSmoothTime);
 
             // cammbio la rotazione del personaggio verso il punto in cui vuole andare
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z)), Time.deltaTime * 5f);
+
             // applico il movimento
             Vector3 moveDirection = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
+
             _controller.Move(moveDirection.normalized * (velocity * Time.deltaTime));
         }
         else
@@ -110,7 +112,7 @@ public class ProtagonistController : GameCharacterController
         if (!wantToAttack) return;
 
         animator.SetBool(
-            animator.GetCurrentAnimatorStateInfo(0).IsName("Attack00") ? ClickedForTheNextAttack : IsAttacking, 
+            animator.GetCurrentAnimatorStateInfo(0).IsName("Attack00") ? ClickedForTheNextAttack : IsAttacking,
             true);
     }
 

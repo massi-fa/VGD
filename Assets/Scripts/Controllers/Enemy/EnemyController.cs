@@ -5,17 +5,20 @@ namespace Controllers.Enemy
 {
     public class EnemyController : GameCharacterController
     {
-
         public float lookRadius = 10f;
-
+        public float maxDistanceForMeleeAttack = 2f;
         private NavMeshAgent _navigationMeshAgent;
         private NavMeshPath _navMeshPath;
-        public Transform playerTransform;
+        private Transform playerTransform;
 
-        public Vector3 originalPosition;
+        private Vector3 originalPosition;
 
         private float _deadAnimationTime;
-    
+
+        public bool hasRangedAttacks;
+        public float maxDistanceForRangedAttack;
+        private static readonly int Melee = Animator.StringToHash("Melee");
+        private static readonly int Distance = Animator.StringToHash("Distance");
 
         // Start is called before the first frame update
         protected override void Start()
@@ -24,27 +27,39 @@ namespace Controllers.Enemy
 
             // I nemici flashano se colpiti
             flashWhenHit = true;
-        
+
             // Inizializza nav agent variable e crea un nuovo nev mesh path
             _navigationMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshPath = new NavMeshPath();
-        
+
             // Traccio il player
             playerTransform = PlayerTracker.instance.player.transform;
-            
+
             // Controllo la distanza da terra per approssimare la posizione originale
             originalPosition = transform.position;
-            if (Physics.Raycast (transform.position, Vector3.down, out var hit, 100, LayerMask.GetMask("Ground"))) {
+            if (Physics.Raycast(transform.position, Vector3.down, out var hit, 100, LayerMask.GetMask("Ground")))
+            {
                 var distanceToGround = hit.distance;
                 originalPosition.y -= distanceToGround;
             }
-            
+
             // Calcola ora quanto dura la lunghezza della clip di morte
             var clips = animator.runtimeAnimatorController.animationClips;
             foreach (var clip in clips)
             {
                 if (clip.name.Contains("Dead"))
                     _deadAnimationTime = clip.length;
+            }
+            
+            // range/melee
+            if (hasRangedAttacks)
+            {
+                if (maxDistanceForRangedAttack == 0 || maxDistanceForRangedAttack >= lookRadius)
+                    maxDistanceForRangedAttack = lookRadius - 0.1f;
+            }
+            else
+            {
+                maxDistanceForRangedAttack = 0;
             }
         }
 
@@ -60,21 +75,30 @@ namespace Controllers.Enemy
                 && _navigationMeshAgent.CalculatePath(playerTransform.position, _navMeshPath)
                 && _navMeshPath.status == NavMeshPathStatus.PathComplete)
             {
-        
                 // il nemico viene aggrato
-                _navigationMeshAgent.SetPath(_navMeshPath);
-                animator.SetBool(IsMoving, true);
-        
+                // se il nemico ha attacchi range lo inizia ad attaccare
+                if (hasRangedAttacks && distanceFromPlayer <= maxDistanceForRangedAttack)
+                {
+                    _navigationMeshAgent.ResetPath();
+                }
+                // altrimenti si muoverà per poi attaccarlo melee
+                else
+                {
+                    _navigationMeshAgent.SetPath(_navMeshPath);
+                    animator.SetBool(IsMoving, true);
+                }
             }
             // altrimenti se non lo vede
             else
             {
                 // Se è lontano al punto originale
-                if (Vector3.Distance(transform.position, originalPosition) > 2.0f)
+                if (Vector3.Distance(transform.position, originalPosition) > 3.0f
+                    && _navigationMeshAgent.CalculatePath(originalPosition, _navMeshPath)
+                    && _navMeshPath.status == NavMeshPathStatus.PathComplete)
                 {
                     // Torna al punto originale
                     animator.SetBool(IsMoving, true);
-                    _navigationMeshAgent.SetDestination(originalPosition);
+                    _navigationMeshAgent.SetPath(_navMeshPath);
                 }
                 // Altrimenti sta fermo
                 else
@@ -84,7 +108,6 @@ namespace Controllers.Enemy
             }
         }
 
-
         protected override void ManageAttack()
         {
             base.ManageAttack();
@@ -92,11 +115,27 @@ namespace Controllers.Enemy
             // distanza fra il nemico e il player
             var distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-            // se il nemico è abbastanza vicino
-            if (distanceFromPlayer <= _navigationMeshAgent.stoppingDistance)
+            var rangedCase = hasRangedAttacks && distanceFromPlayer <= maxDistanceForRangedAttack;
+            var meleeCase = distanceFromPlayer <= maxDistanceForMeleeAttack;
+            // se il nemico è a distanza per colpire con armi bianche
+            if (rangedCase || meleeCase)
             {
                 // smette di muoversi
                 animator.SetBool(IsMoving, false);
+                _navigationMeshAgent.ResetPath();
+
+                // se il nemico è a distanza per colpire dalla distanza
+                if (meleeCase)
+                {
+                    animator.ResetTrigger(Distance);
+                    animator.SetTrigger(Melee);
+                }
+                else
+                {
+                    animator.ResetTrigger(Melee);
+                    animator.SetTrigger(Distance);
+                }
+
 
                 // Attacca il player
                 animator.SetBool(IsAttacking, true);
@@ -104,8 +143,11 @@ namespace Controllers.Enemy
                 // Ruota verso il player
                 FacePlayer();
             }
+            // altrimenti non sta attaccando
             else
             {
+                animator.ResetTrigger(Melee);
+                animator.ResetTrigger(Distance);
                 animator.SetBool(IsAttacking, false);
             }
         }
@@ -131,17 +173,30 @@ namespace Controllers.Enemy
             //changeColorMaterial.ResetColor();
 
             // Distruggi il gameobject
-            Destroy(gameObject,_deadAnimationTime);
+            Destroy(gameObject, _deadAnimationTime);
         }
 
         #region EnemyVisionOnEditor
+
         private void OnDrawGizmosSelected()
         {
             // Disegna nell'editor una sfera rossa che rappresenterà il volume il cui il nemico può vedere
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, lookRadius);
-        }
-        #endregion
+            var position = transform.position;
 
+            
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(position, lookRadius);
+
+            if (hasRangedAttacks)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(position, maxDistanceForRangedAttack);
+            }
+
+            Gizmos.color = Color.black;
+            Gizmos.DrawWireSphere(position, maxDistanceForMeleeAttack);
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class TrapController : GameCharacterController
@@ -61,7 +62,27 @@ public class TrapController : GameCharacterController
         _destination += _direction * pushForce;
         _lastPushTime = currentTime;
     }
-    
+
+    /*private bool hasPassedOneFrame;
+    private void FixedUpdate()
+    {
+        //var magnitudeVecBeforeUpdate = Vector3.Distance(player.transform.position, destination);
+        var vecBeforeUpdate = _destination - _player.transform.position;
+        if (hasPassedOneFrame)
+        {
+            hasPassedOneFrame = false;
+            _hasHitSomething = false;
+            _player.GetComponent<CharacterController>().enabled = true;
+            _player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            return;
+        }
+
+        _direction = new Vector3(vecBeforeUpdate.x, 0f, vecBeforeUpdate.z);
+        _player.GetComponent<CharacterController>().enabled = false;
+        _player.GetComponent<Rigidbody>().AddForce(_direction * pushForce, ForceMode.Impulse);
+        hasPassedOneFrame = true;
+    }*/
+
     protected override void Update()
     {
         base.Update();
@@ -81,6 +102,5 @@ public class TrapController : GameCharacterController
 
         _direction = new Vector3(vecBeforeUpdate.x, 0f, vecBeforeUpdate.z);
         _characterController.Move(_direction * magnitudeVecAfterUpdate);
-
     }
 }

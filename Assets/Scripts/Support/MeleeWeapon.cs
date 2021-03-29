@@ -6,7 +6,7 @@ public class MeleeWeapon : MonoBehaviour
     private GameObject _rootParent;
     protected internal string[] validTags;
 
-    private void Start()
+    private void Awake()
     {
         GameObject parent = gameObject;
         
@@ -22,7 +22,6 @@ public class MeleeWeapon : MonoBehaviour
             validTags = new [] { "Player" };
         else if (_rootParent.CompareTag("Trap"))
             validTags = new [] { "Player" };
-
     }
 
 }

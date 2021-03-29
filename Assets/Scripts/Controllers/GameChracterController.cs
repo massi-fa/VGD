@@ -6,10 +6,11 @@ public class GameCharacterController : MonoBehaviour
     private Animation _singleAnimationInsteadOfAnimator;
     private CharacterStatistics _myStats;
 
-    private string _lastAnimationName;
+    private int _lastStateAnimationName;
     private string _lastWeaponUsedName;
     private string _lastTargetName;
     private   float _lastAttackTime;
+    private string _lastClipAnimationName;
     public float countdownAttack = 1.0f;
 
     private  ChangeColorMaterialTemporary _changeColorMaterial;
@@ -34,8 +35,8 @@ public class GameCharacterController : MonoBehaviour
         if (isAnimated)
         {
             if (animator.GetBool(IsDead)) return;
-            ManageMovement();
             ManageJumpAndGravity();
+            ManageMovement();
             ManageAttack();
         }
         ManageAttack();
@@ -71,41 +72,54 @@ public class GameCharacterController : MonoBehaviour
             return;
         
         bool isAttacking;
-        string currentAnimationName;
-        
-        float currentTime = Time.time;
+        int currentStateAnimationName;
+        string currentClipAnimationName;
+        var currentTime = Time.time;
         
         if (isAnimated)
         {
-            currentAnimationName = (animator.GetCurrentAnimatorClipInfo(0))[0].clip.name;
+            currentClipAnimationName = (animator.GetCurrentAnimatorClipInfo(0))[0].clip.name;
+            currentStateAnimationName = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             isAttacking = animator.GetBool(IsAttacking);
         }
         else
         {
-            currentAnimationName = _singleAnimationInsteadOfAnimator.clip.name;
+            currentStateAnimationName = _singleAnimationInsteadOfAnimator.clip.GetHashCode();
+            currentClipAnimationName = _singleAnimationInsteadOfAnimator.clip.name;
             isAttacking = _singleAnimationInsteadOfAnimator.isPlaying;
         }
         string currentTargetName = otherObject.name;
-    /*
-        print($"target Old VS New: {lastTargetName} | {currentTargetName} = {!currentTargetName.Equals(lastTargetName)}");
-        print($"weapon Old VS New: {lastWeaponUsedName} | {myObjectPieceCollidedName} = {!myObjectPieceCollidedName.Equals(lastWeaponUsedName)}");
-        print($"time: current - old : {(currentTime - lastAttackTime > 1.0f)}");
-        print($"animation Old VS New: {lastAnimationName} | {currentAnimationName} = {!currentAnimationName.Equals(lastAnimationName)}");
-        print("isAttacking? " + isAttacking);
-        print(currentAnimationName + " containsAttack? " + currentAnimationName.Contains("Attack"));
+    
+        //print($"target Old VS New: {_lastTargetName} | {currentTargetName} = {!currentTargetName.Equals(_lastTargetName)}");
+        //print($"weapon Old VS New: {_lastWeaponUsedName} | {myObjectPieceCollidedName} = {!myObjectPieceCollidedName.Equals(_lastWeaponUsedName)}");
+        //print($"time: current - old : {(currentTime - _lastAttackTime > 1.0f)}");
+        //print($"animation Old VS New: {_lastAnimationName} | {currentStateAnimationName} = {currentTargetName != _lastTargetName}");
+        //print("isAttacking? " + isAttacking);
+        //print(currentStateAnimationName + " containsAttack? " + currentStateAnimationName.Contains("Attack"));
         
-      */  
+        
         if (isAttacking &&
-            currentAnimationName.Contains("Attack") && (
+            currentClipAnimationName.Contains("Attack") && (
                 currentTime - _lastAttackTime > countdownAttack
-                || !_lastTargetName.Equals(currentTargetName)
-                || !currentAnimationName.Equals(_lastAnimationName)
-                || (!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentAnimationName.Contains("DoubleAttack"))
+                || !currentTargetName.Equals(_lastTargetName)
+                || currentStateAnimationName != _lastStateAnimationName
+                || (!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentClipAnimationName.Contains("DoubleAttack"))
             )
         )
         {
-            
-            _lastAnimationName = currentAnimationName;
+            //print($"target Old VS New: {_lastTargetName} | {currentTargetName} = {!currentTargetName.Equals(_lastTargetName)}");
+            //print($"weapon Old VS New: {_lastWeaponUsedName} | {myObjectPieceCollidedName} = {!myObjectPieceCollidedName.Equals(_lastWeaponUsedName)}");
+            //print($"time: {currentTime} - {_lastAttackTime} > {countdownAttack} : {(currentTime - _lastAttackTime > 1.0f)}");
+            //print($"animation Old VS New: {currentStateAnimationName} | {currentStateAnimationName} = {currentStateAnimationName != _lastStateAnimationName}");
+            //print("isAttacking? " + isAttacking);
+            //print(currentStateAnimationName + " containsAttack? " + currentStateAnimationName.Contains("Attack"));
+        /*    print(currentTime - _lastAttackTime > countdownAttack);
+            print(!currentTargetName.Equals(_lastTargetName));
+            print($"{currentStateAnimationName} | {_lastStateAnimationName} := {(currentStateAnimationName != _lastStateAnimationName)}");
+            print(!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentClipAnimationName.Contains("DoubleAttack"));
+            print("_________________________-");*/
+            _lastClipAnimationName = currentClipAnimationName;
+            _lastStateAnimationName = currentStateAnimationName;
             _lastWeaponUsedName = myObjectPieceCollidedName;
             _lastTargetName = currentTargetName;
             _lastAttackTime = currentTime;

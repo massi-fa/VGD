@@ -48,7 +48,8 @@ public class ChangeColorMaterialTemporary : MonoBehaviour
         // nel colore originale
         for (var i = 0; i < _currentRenderers.Length; i++)
         {
-            _currentRenderers[i].material.color = _originalFirstMaterial[i].color;
+            if(_currentRenderers[i].material.HasProperty("_Color"))
+                _currentRenderers[i].material.color = _originalFirstMaterial[i].color;
         }
     }
 }

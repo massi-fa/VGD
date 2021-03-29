@@ -2,8 +2,9 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <CscToolPath>C:\Program Files\Unity\Hub\Editor\2020.1.10f1\Editor\Data\Tools\RoslynScripts</CscToolPath>
-    <CscToolExe>unity_csc.bat</CscToolExe>
+    <_TargetFrameworkDirectories>non_empty_path_generated_by_unity.rider.package</_TargetFrameworkDirectories>
+    <_FullFrameworkReferenceAssemblyPaths>non_empty_path_generated_by_unity.rider.package</_FullFrameworkReferenceAssemblyPaths>
+    <DisableHandlePackageFileConflicts>true</DisableHandlePackageFileConflicts>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,7 +12,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{53AC957D-9752-02A7-BCC8-A8FDC8FE8460}</ProjectGuid>
+    <ProjectGuid>{d8c73e23-bf21-9492-1b69-111857faaae5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -29,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -47,67 +50,64 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.10f1\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.10f1\Editor\Data\Managed/UnityEditor.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-     <Compile Include="Assets\Scripts\Controllers\Camera\CameraCollision.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Camera\CameraCollisionInControllers.cs" />
      <Compile Include="Assets\Scripts\Support\RotateGameObject.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\EnemyStatistics.cs" />
      <Compile Include="Assets\Scripts\AnimatorExtraBehaviours\Protagonist\ProtagonistIdleExtraBehaviour.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Projectile\ProjectileController.cs" />
      <Compile Include="Assets\Scripts\Controllers\Trap\TrapController.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\CharacterStatistics.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\TrapStatistics.cs" />
      <Compile Include="Assets\Scripts\AnimatorExtraBehaviours\Protagonist\ProtagonistAttack01ExtraBehaviour.cs" />
-     <Compile Include="Assets\Scripts\Controllers\Camera\CameraFollow2.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Camera\CameraFollow2InControllers.cs" />
      <Compile Include="Assets\Scripts\Controllers\Collectible\CollectibleController.cs" />
      <Compile Include="Assets\Scripts\Support\PushPlayer.cs" />
      <Compile Include="Assets\Scripts\Controllers\CharacterCollisionController.cs" />
      <Compile Include="Assets\Scripts\Support\ChangeColorMaterialTemporary.cs" />
      <Compile Include="Assets\Scripts\Support\MeleeWeapon.cs" />
      <Compile Include="Assets\Scripts\Support\Waiter.cs" />
-     <Compile Include="Assets\CameraFollow.cs" />
+     <Compile Include="Assets\Scripts\Support\DistanceWeapon.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\ProtagonistStatistics.cs" />
      <Compile Include="Assets\Scripts\Controllers\GameChracterController.cs" />
      <Compile Include="Assets\Scripts\Support\PlayerTracker.cs" />
      <Compile Include="Assets\Scripts\Controllers\Protagonist\ProtagonistController.cs" />
      <Compile Include="Assets\Scripts\Controllers\Enemy\EnemyController.cs" />
+     <None Include="Assets\Prefabs\Enemies\stuff_used\Shaders\PolyArtMaskTint.shader" />
  <Reference Include="Unity.Timeline.Editor">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Cinemachine">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Cinemachine.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VSCode.Editor">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
  <Reference Include="com.unity.cinemachine.editor">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/com.unity.cinemachine.editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VisualStudio.Editor">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Users/39342/Documents/GitHub/VGD/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ <HintPath>C:/Users/Jacopo Mereu/Documents/GitHub/VGDGithub/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -291,6 +291,9 @@
  </Reference>
  <Reference Include="UnityEngine.XRModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.10f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.10f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
