@@ -1816,7 +1816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f877bf142f0534ba8177b0adcfeb43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownAttack: 1
+  countdownAttack: 0.7
   flashWhenHit: 0
   isAnimated: 1
   velocity: 6
@@ -1843,7 +1843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e464c3aca80c3984ea71194c3a5bf7d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 1000
+  maxHp: 100
   baseArmour: 0
   baseDamage: 10
   hp: 0

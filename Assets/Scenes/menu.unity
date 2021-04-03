@@ -1026,6 +1026,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 757515425}
+  - component: {fileID: 757515427}
   - component: {fileID: 757515426}
   m_Layer: 5
   m_Name: MenuHandlerBox
@@ -1062,7 +1063,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 757515424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: faabb02c210213449890d8ba5175d4cf, type: 3}
+  m_Script: {fileID: 11500000, guid: f24d05ce0e5bb814aa20e5b2f5298b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &757515427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757515424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cce45542ef25d3e4cbff0f6d483517c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &846204642
@@ -2365,8 +2378,8 @@ MonoBehaviour:
     This game was created by 4 students from the University of Cagliari
     for the video game design course.
 
-    In the game you will be able to move
-    with the W A S D keys, jump with SPACE and fight with LEFT MOUSE BUTTON.'
+    In the game you will be able to move with
+    the W A S D keys, jump with SPACE and fight with LEFT MOUSE BUTTON.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2614,7 +2627,6 @@ GameObject:
   - component: {fileID: 2000777113}
   - component: {fileID: 2000777115}
   - component: {fileID: 2000777114}
-  - component: {fileID: 2000777116}
   m_Layer: 5
   m_Name: Home
   m_TagString: Untagged
@@ -2683,15 +2695,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000777112}
   m_CullTransparentMesh: 0
---- !u!114 &2000777116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000777112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38bc1c08f67e4a94682de867a17ed791, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class GameCharacterController : MonoBehaviour
 {
@@ -22,12 +23,14 @@ public class GameCharacterController : MonoBehaviour
     public bool flashWhenHit;
     public bool isAnimated = true;
 
+    private GameCharacterHealthBarController _healtBarControllerScript;
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         _singleAnimationInsteadOfAnimator = GetComponent<Animation>();
         _myStats = GetComponent<CharacterStatistics>();
         _changeColorMaterial = GetComponent<ChangeColorMaterialTemporary>();
+        _healtBarControllerScript = GetComponent<GameCharacterHealthBarController>();
     }
 
     protected virtual void Update()
@@ -41,30 +44,7 @@ public class GameCharacterController : MonoBehaviour
         }
         ManageAttack();
     }
-
-    private void TakeDamage(int damage)
-    {
-        // Se il danno è non positivo esco
-        if (damage <= 0)
-            return;
-
-        // scala il danno preso in base all'armatura del personaggio
-        damage -= _myStats.armour;
-        // se il danno è non positivo, lo setto a un minimo di 1
-        if (damage <= 0)
-            damage = 1;
-
-        // cambio il colore
-        if(flashWhenHit)
-            _changeColorMaterial.FlashColor();
-            
-        // Scalo gli hp in baso al danno preso
-        _myStats.hp -= damage;
-
-        // Se gli hp sono non positivi, lancio la gestione della morte
-        if (_myStats.hp <= 0)
-            Die();
-    }
+    
     public void TargetTouched(string myObjectPieceCollidedName, GameObject otherObject)
     {
         var animatedTarget = otherObject.GetComponent<GameCharacterController>();
@@ -84,11 +64,12 @@ public class GameCharacterController : MonoBehaviour
         }
         else
         {
-            currentStateAnimationName = _singleAnimationInsteadOfAnimator.clip.GetHashCode();
-            currentClipAnimationName = _singleAnimationInsteadOfAnimator.clip.name;
+            AnimationClip clip;
+            currentStateAnimationName = (clip = _singleAnimationInsteadOfAnimator.clip).GetHashCode();
+            currentClipAnimationName = clip.name;
             isAttacking = _singleAnimationInsteadOfAnimator.isPlaying;
         }
-        string currentTargetName = otherObject.name;
+        var currentTargetName = otherObject.name;
     
         //print($"target Old VS New: {_lastTargetName} | {currentTargetName} = {!currentTargetName.Equals(_lastTargetName)}");
         //print($"weapon Old VS New: {_lastWeaponUsedName} | {myObjectPieceCollidedName} = {!myObjectPieceCollidedName.Equals(_lastWeaponUsedName)}");
@@ -138,4 +119,79 @@ public class GameCharacterController : MonoBehaviour
     protected virtual void ManageJumpAndGravity() { }
     
     protected virtual  void Die() {}
+    
+    
+    #region FixedStatus
+    
+    private void TakeDamage(int damage)
+    {
+        // Se il danno è non positivo esco
+        if (damage <= 0)
+            return;
+
+        // scala il danno preso in base all'armatura del personaggio
+        damage -= _myStats.armour;
+        // se il danno è non positivo, lo setto a un minimo di 1
+        if (damage <= 0)
+            damage = 1;
+
+        // cambio il colore
+        if(flashWhenHit)
+            _changeColorMaterial.FlashColor();
+        
+        
+        // Scalo gli hp in baso al danno preso
+        _myStats.hp -= damage;
+
+        // update the health bar
+        if (_healtBarControllerScript != null)
+            _healtBarControllerScript.TakeDamage(damage);
+        
+        // Se gli hp sono non positivi, lancio la gestione della morte
+        if (_myStats.hp <= 0)
+            Die();
+    }
+    
+    public void TakeHitPoints(int bonusHp) {
+        // Se sono full esco
+        if (_myStats.hp == _myStats.maxHp)
+            return;
+
+        // Se col bonus dovessi sforare il limite massimo
+        if (_myStats.hp + bonusHp > _myStats.maxHp)
+            // imposto il bonus come la differenza fra la vita massima e la vita attuale
+            bonusHp = _myStats.maxHp - _myStats.hp;
+        
+        // aggiorno la vita attuale col bonus
+        _myStats.hp += bonusHp;
+        
+        // Aggiorno la barra della vita
+        if (_healtBarControllerScript != null)
+            _healtBarControllerScript.RestoreHealt(bonusHp);
+    }
+
+
+    public void UpgradeArmour(int bonusArmour) {
+        _myStats.armour += bonusArmour;
+    }
+
+    public void UpgradeDamage(int bonusDamange)
+    {
+        _myStats.damage += bonusDamange;
+    }
+    #endregion
+
+    #region TemporaneousStatus
+    public IEnumerator TemporaneousDamageBuff(int bonusDamage, int seconds) {
+        _myStats.damage += bonusDamage;
+        yield return Waiter.Active(seconds);
+        _myStats.damage -= bonusDamage;
+    }
+
+    public IEnumerator TemporaneousArmourBuff(int bonusArmour, int seconds) {
+        _myStats.armour += bonusArmour;
+        yield return Waiter.Active(seconds);
+        _myStats.armour -= bonusArmour;
+    }
+    #endregion
 }
