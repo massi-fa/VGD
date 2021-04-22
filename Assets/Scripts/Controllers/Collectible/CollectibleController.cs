@@ -11,6 +11,7 @@ public class CollectibleController : MonoBehaviour
     {
         Damage,
         Armour,
+        Speed,
         Heal
     };
     public BonusType bonusType;
@@ -54,6 +55,9 @@ public class CollectibleController : MonoBehaviour
                     StartCoroutine(c.TemporaneousArmourBuff(bonusValue, bonusSeconds));
                     break;
                 
+                case BonusType.Speed:
+                    StartCoroutine(c.TemporaneousSpeedBuff(bonusValue, bonusSeconds));
+                    break;                
                 case BonusType.Heal:
                     c.TakeHitPoints(bonusValue);
                     break;

@@ -50,7 +50,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\PyroParticles\Prefab\Editor\PyroParticlesEditor.cs" />
+     <Compile Include="Assets\VRInteractions\Examples\Shared\Editor\ExposeProperties\ExposableMonobehaviorEditor.cs" />
+     <Compile Include="Assets\VRInteractions\Examples\Shared\Editor\Actions\ActionDrawer.cs" />
+     <Compile Include="Assets\VRInteractions\Examples\Shared\Editor\ExposeProperties\ExposeProperties.cs" />
  <Reference Include="UnityEditor.TestRunner">
  <HintPath>C:/Users/Jacopo Mereu/Desktop/Jacopo/universita/Anni/3/VGD/UnityProgrammi/VGDProject/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
  </Reference>

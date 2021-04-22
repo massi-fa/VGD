@@ -8,6 +8,8 @@ public class CameraFollow2InControllers : MonoBehaviour
     public GameObject CameraFollowObj;
     Vector3 FollowPOS;
     public float clampAngle = 80.0f;
+    [Tooltip("Sensibilità nella rotazione del mouse")]
+    [Min(1f)]
     public float inputSensitivity = 150.0f;
     public float camDistanceXToPlayer;
     public float camDistanceYToPlayer;

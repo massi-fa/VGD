@@ -17,7 +17,7 @@ public class MeleeWeapon : MonoBehaviour
         gameCharacterController = _rootParent.GetComponent<GameCharacterController>();
 
         if (_rootParent.CompareTag("Player"))
-            validTags = new [] { "Enemy", "mechanism" };
+            validTags = new [] { "Enemy", "Mechanism" };
         else if (_rootParent.CompareTag("Enemy"))
             validTags = new [] { "Player" };
         else if (_rootParent.CompareTag("Trap"))

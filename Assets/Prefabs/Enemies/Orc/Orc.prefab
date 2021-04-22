@@ -1089,12 +1089,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cd0edf25307d546aebf0655b46c958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownAttack: 1
+  countdownAttack: 0.3
   flashWhenHit: 1
   isAnimated: 1
   lookRadius: 10
   maxDistanceForMeleeAttack: 2.4
-  _deadAnimationTime: 0
+  hasRangedAttacks: 0
+  maxDistanceForRangedAttack: 0
 --- !u!195 &5903856018256914034
 NavMeshAgent:
   m_ObjectHideFlags: 0

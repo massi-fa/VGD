@@ -10,28 +10,28 @@ public class ProjectileController : MonoBehaviour
 
     public float speed = 20f;
 
-    private Vector3 direction;
+    private Vector3 _direction;
 
-    private GameObject player;
+    private GameObject _player;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        player = PlayerTracker.instance.player;
+        _player = PlayerTracker.instance.player;
 
-        var tmp = player.transform.position;
-        tmp.y+= player.GetComponent<CharacterController>().height / 2;
-        direction = (tmp - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        var tmp = _player.transform.position;
+        tmp.y+= _player.GetComponent<CharacterController>().height / 2;
+        _direction = (tmp - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(new Vector3(_direction.x, 0f, _direction.z));
         
         transform.SetParent(null, true);
 
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        float currenDistance = Time.deltaTime * speed;
+        var currenDistance = Time.deltaTime * speed;
 
         var tmp = transform;
         tmp.position += currenDistance * tmp.forward;

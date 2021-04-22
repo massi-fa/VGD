@@ -1,21 +1,25 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Controllers.Enemy
 {
     public class EnemyController : GameCharacterController
     {
+        [Tooltip("Distanza necessaria per aggrare del nemico")]
         public float lookRadius = 10f;
+        [Tooltip("Distanza dopo la quale usa gli attacchi melee")]
         public float maxDistanceForMeleeAttack = 2f;
         private NavMeshAgent _navigationMeshAgent;
         private NavMeshPath _navMeshPath;
-        private Transform playerTransform;
+        private Transform _playerTransform;
 
-        private Vector3 originalPosition;
+        private Vector3 _originalPosition;
 
-        private float _deadAnimationTime;
-
+        //private float _deadAnimationTime;
+        [Tooltip("Spuntarla se il nemico ha attacchi range (I PREFAB SON GIA' PRONTI, NON TOCCARE)")]
         public bool hasRangedAttacks;
+        [Tooltip("Distanza dopo la quale usa gli attacchi a distanza")]
         public float maxDistanceForRangedAttack;
         private static readonly int Melee = Animator.StringToHash("Melee");
         private static readonly int Distance = Animator.StringToHash("Distance");
@@ -33,14 +37,14 @@ namespace Controllers.Enemy
             _navMeshPath = new NavMeshPath();
 
             // Traccio il player
-            playerTransform = PlayerTracker.instance.player.transform;
+            _playerTransform = PlayerTracker.instance.player.transform;
 
             // Controllo la distanza da terra per approssimare la posizione originale
-            originalPosition = transform.position;
+            _originalPosition = transform.position;
             if (Physics.Raycast(transform.position, Vector3.down, out var hit, 100, LayerMask.GetMask("Ground")))
             {
                 var distanceToGround = hit.distance;
-                originalPosition.y -= distanceToGround;
+                _originalPosition.y -= distanceToGround;
             }
 
             // Calcola ora quanto dura la lunghezza della clip di morte
@@ -48,7 +52,7 @@ namespace Controllers.Enemy
             foreach (var clip in clips)
             {
                 if (clip.name.Contains("Dead"))
-                    _deadAnimationTime = clip.length;
+                    deadAnimationTime = clip.length;
             }
             
             // range/melee
@@ -68,11 +72,11 @@ namespace Controllers.Enemy
             base.ManageMovement();
 
             // distanza fra il nemico e il player
-            var distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            var distanceFromPlayer = Vector3.Distance(transform.position, _playerTransform.position);
 
             // se il nemico vede il player
             if (distanceFromPlayer <= lookRadius
-                && _navigationMeshAgent.CalculatePath(playerTransform.position, _navMeshPath)
+                && _navigationMeshAgent.CalculatePath(_playerTransform.position, _navMeshPath)
                 && _navMeshPath.status == NavMeshPathStatus.PathComplete)
             {
                 // il nemico viene aggrato
@@ -92,8 +96,8 @@ namespace Controllers.Enemy
             else
             {
                 // Se è lontano al punto originale
-                if (Vector3.Distance(transform.position, originalPosition) > 3.0f
-                    && _navigationMeshAgent.CalculatePath(originalPosition, _navMeshPath)
+                if (Vector3.Distance(transform.position, _originalPosition) > 3.0f
+                    && _navigationMeshAgent.CalculatePath(_originalPosition, _navMeshPath)
                     && _navMeshPath.status == NavMeshPathStatus.PathComplete)
                 {
                     // Torna al punto originale
@@ -113,7 +117,7 @@ namespace Controllers.Enemy
             base.ManageAttack();
 
             // distanza fra il nemico e il player
-            var distanceFromPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            var distanceFromPlayer = Vector3.Distance(transform.position, _playerTransform.position);
 
             var rangedCase = hasRangedAttacks && distanceFromPlayer <= maxDistanceForRangedAttack;
             var meleeCase = distanceFromPlayer <= maxDistanceForMeleeAttack;
@@ -155,7 +159,7 @@ namespace Controllers.Enemy
         private void FacePlayer()
         {
             // ricavo la direzione verso il player
-            var direction = (playerTransform.position - transform.position).normalized;
+            var direction = (_playerTransform.position - transform.position).normalized;
             // trova la rotazione che deve fare per guardare il player
             var lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
             // applica quella rotazione in maniera più smooth
@@ -165,15 +169,17 @@ namespace Controllers.Enemy
         protected override void Die()
         {
             base.Die();
-
-            // Animazione
-            animator.SetBool(IsDead, true);
-
-            // per sicurezza resetto il colore prima di distruggere l'oggetto
-            //changeColorMaterial.ResetColor();
-
+            
             // Distruggi il gameobject
-            Destroy(gameObject, _deadAnimationTime);
+            Destroy(gameObject, deadAnimationTime);
+        }
+
+        public override IEnumerator TemporaneousSpeedBuff(int bonusSpeed, int seconds)
+        {
+            yield return base.TemporaneousSpeedBuff(bonusSpeed, seconds);
+            GetComponent<NavMeshAgent>().speed += bonusSpeed;
+            yield return Waiter.Active(seconds);
+            GetComponent<NavMeshAgent>().speed -= bonusSpeed;
         }
 
         #region EnemyVisionOnEditor

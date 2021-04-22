@@ -50,12 +50,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Controllers\Mechanisms\Gate\GateController.cs" />
      <Compile Include="Assets\Scripts\Controllers\Camera\CameraCollisionInControllers.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
      <Compile Include="Assets\Scripts\Support\RotateGameObject.cs" />
      <Compile Include="Assets\Scripts\Button\Quit.cs" />
      <Compile Include="Assets\Scripts\CharactersStatistics\EnemyStatistics.cs" />
-     <Compile Include="Assets\Scripts\Controllers\GameCharacterHealthBarController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Mechanisms\TriggerMechanism.cs" />
+     <Compile Include="Assets\Scripts\Controllers\UI\GameCharacterHealthBarController.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
      <Compile Include="Assets\Scripts\AnimatorExtraBehaviours\Protagonist\ProtagonistIdleExtraBehaviour.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
@@ -90,6 +92,7 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
      <Compile Include="Assets\Scripts\Support\DistanceWeapon.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Mechanisms\MechanismController.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
@@ -100,7 +103,9 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
+     <Compile Include="Assets\Scripts\Controllers\UI\GameCharacterDashBar.cs" />
      <Compile Include="Assets\Scripts\Controllers\GameChracterController.cs" />
+     <Compile Include="Assets\Scripts\Support\SceneTransitioner.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
@@ -108,11 +113,13 @@
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
      <Compile Include="Assets\Scripts\Button\Play.cs" />
      <Compile Include="Assets\Scripts\Support\PlayerTracker.cs" />
+     <Compile Include="Assets\Scripts\Controllers\Mechanisms\JumperController.cs" />
      <Compile Include="Assets\Scripts\Controllers\Protagonist\ProtagonistController.cs" />
      <Compile Include="Assets\Scripts\Controllers\Enemy\EnemyController.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+     <None Include="Assets\Prefabs\Collectibles\stuff_used\FireWing\Shader\Wing_Main.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
@@ -124,7 +131,9 @@
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+     <None Include="Assets\Prefabs\Text3DOneSide\Text3D.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+     <None Include="Assets\Prefabs\Collectibles\stuff_used\FireWing\Shader\Wing_Sub.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />

@@ -772,11 +772,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cd0edf25307d546aebf0655b46c958, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdownAttack: 1
+  countdownAttack: 0.5
   flashWhenHit: 1
   isAnimated: 1
   lookRadius: 10
   maxDistanceForMeleeAttack: 1.62
+  hasRangedAttacks: 0
+  maxDistanceForRangedAttack: 0
 --- !u!1 &1015226195082516222
 GameObject:
   m_ObjectHideFlags: 0

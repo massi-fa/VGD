@@ -5,25 +5,32 @@ public class GameCharacterController : MonoBehaviour
 {
     protected Animator animator;
     private Animation _singleAnimationInsteadOfAnimator;
-    private CharacterStatistics _myStats;
+    protected CharacterStatistics _myStats;
 
     private int _lastStateAnimationName;
     private string _lastWeaponUsedName;
     private string _lastTargetName;
-    private   float _lastAttackTime;
+    private float _lastAttackTime;
     private string _lastClipAnimationName;
+    [Tooltip("Intervallo temporale che deve trascorrere\n prima di ricevere danno dallo stesso attacco\nNon scendere sotto 0.3f!")]
+    [Min(0)]
     public float countdownAttack = 1.0f;
 
-    private  ChangeColorMaterialTemporary _changeColorMaterial;
-    
-    protected  static readonly int IsAttacking = Animator.StringToHash("isAttacking");
-    protected  static readonly int IsMoving = Animator.StringToHash("isMoving");
-    protected  static readonly int IsDead = Animator.StringToHash("isDead");
+    private ChangeColorMaterialTemporary _changeColorMaterial;
 
+    protected static readonly int IsAttacking = Animator.StringToHash("isAttacking");
+    protected static readonly int IsMoving = Animator.StringToHash("isMoving");
+    protected static readonly int IsDead = Animator.StringToHash("isDead");
+
+    [Tooltip("Cambia il colore per poco tempo quando si riceve danno\nSe impostato a TRUE/SPUNTATO,\nallora richiede lo script: \"ChangeColorMaterialTemporary\"")]
     public bool flashWhenHit;
+    [Tooltip("Il flag deve essere VERO/SPUNTATO per le cose animate\n(enemies e player)\nViceversa (FALSE/NON SPUNTATO) per le cose NON animate\n(Traps)")]
     public bool isAnimated = true;
 
-    private GameCharacterHealthBarController _healtBarControllerScript;
+    protected GameCharacterHealthBarController _healtBarControllerScript;
+
+    protected float deadAnimationTime;
+
     protected virtual void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,6 +38,17 @@ public class GameCharacterController : MonoBehaviour
         _myStats = GetComponent<CharacterStatistics>();
         _changeColorMaterial = GetComponent<ChangeColorMaterialTemporary>();
         _healtBarControllerScript = GetComponent<GameCharacterHealthBarController>();
+
+        if (isAnimated)
+        {
+            // Calcola ora quanto dura la lunghezza della clip di morte
+            var clips = animator.runtimeAnimatorController.animationClips;
+            foreach (var clip in clips)
+            {
+                if (clip.name.Contains("Dead"))
+                    deadAnimationTime = clip.length;
+            }
+        }
     }
 
     protected virtual void Update()
@@ -39,23 +57,27 @@ public class GameCharacterController : MonoBehaviour
         {
             if (animator.GetBool(IsDead)) return;
             ManageJumpAndGravity();
+            if (animator.GetBool(IsDead)) return;
             ManageMovement();
             ManageAttack();
         }
+
         ManageAttack();
     }
-    
+
     public void TargetTouched(string myObjectPieceCollidedName, GameObject otherObject)
     {
+        // Se è un game character controller
         var animatedTarget = otherObject.GetComponent<GameCharacterController>();
-        if (animatedTarget == null || !animatedTarget.isAnimated)
+        var triggerMechanism = otherObject.GetComponent<TriggerMechanism>();
+        if (triggerMechanism == null && (animatedTarget == null || !animatedTarget.isAnimated))
             return;
-        
+
         bool isAttacking;
         int currentStateAnimationName;
         string currentClipAnimationName;
         var currentTime = Time.time;
-        
+
         if (isAnimated)
         {
             currentClipAnimationName = (animator.GetCurrentAnimatorClipInfo(0))[0].clip.name;
@@ -69,22 +91,24 @@ public class GameCharacterController : MonoBehaviour
             currentClipAnimationName = clip.name;
             isAttacking = _singleAnimationInsteadOfAnimator.isPlaying;
         }
+
         var currentTargetName = otherObject.name;
-    
+
         //print($"target Old VS New: {_lastTargetName} | {currentTargetName} = {!currentTargetName.Equals(_lastTargetName)}");
         //print($"weapon Old VS New: {_lastWeaponUsedName} | {myObjectPieceCollidedName} = {!myObjectPieceCollidedName.Equals(_lastWeaponUsedName)}");
         //print($"time: current - old : {(currentTime - _lastAttackTime > 1.0f)}");
         //print($"animation Old VS New: {_lastAnimationName} | {currentStateAnimationName} = {currentTargetName != _lastTargetName}");
         //print("isAttacking? " + isAttacking);
         //print(currentStateAnimationName + " containsAttack? " + currentStateAnimationName.Contains("Attack"));
-        
-        
+
+
         if (isAttacking &&
             currentClipAnimationName.Contains("Attack") && (
-                currentTime - _lastAttackTime > countdownAttack
+                (currentTime - _lastAttackTime > countdownAttack || _lastAttackTime == 0f)
                 || !currentTargetName.Equals(_lastTargetName)
                 || currentStateAnimationName != _lastStateAnimationName
-                || (!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentClipAnimationName.Contains("DoubleAttack"))
+                || (!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) &&
+                    currentClipAnimationName.Contains("DoubleAttack"))
             )
         )
         {
@@ -94,39 +118,56 @@ public class GameCharacterController : MonoBehaviour
             //print($"animation Old VS New: {currentStateAnimationName} | {currentStateAnimationName} = {currentStateAnimationName != _lastStateAnimationName}");
             //print("isAttacking? " + isAttacking);
             //print(currentStateAnimationName + " containsAttack? " + currentStateAnimationName.Contains("Attack"));
-        /*    print(currentTime - _lastAttackTime > countdownAttack);
-            print(!currentTargetName.Equals(_lastTargetName));
-            print($"{currentStateAnimationName} | {_lastStateAnimationName} := {(currentStateAnimationName != _lastStateAnimationName)}");
-            print(!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentClipAnimationName.Contains("DoubleAttack"));
-            print("_________________________-");*/
+            /*    print(currentTime - _lastAttackTime > countdownAttack);
+                print(!currentTargetName.Equals(_lastTargetName));
+                print($"{currentStateAnimationName} | {_lastStateAnimationName} := {(currentStateAnimationName != _lastStateAnimationName)}");
+                print(!myObjectPieceCollidedName.Equals(_lastWeaponUsedName) && currentClipAnimationName.Contains("DoubleAttack"));
+                print("_________________________-");*/
             _lastClipAnimationName = currentClipAnimationName;
             _lastStateAnimationName = currentStateAnimationName;
             _lastWeaponUsedName = myObjectPieceCollidedName;
             _lastTargetName = currentTargetName;
             _lastAttackTime = currentTime;
-            
-            animatedTarget.TakeDamage(_myStats.damage);
 
+            if (triggerMechanism != null)
+                triggerMechanism.IsTriggered();
+            else
+                animatedTarget.TakeDamage(_myStats.damage);
         }
     }
-    
-    protected virtual void ManageAttack() { }
 
-    protected virtual void ManageDefence() { }
+    protected virtual void ManageAttack()
+    {
+    }
 
-    protected virtual void ManageMovement() { }
+    protected virtual void ManageDefence()
+    {
+    }
 
-    protected virtual void ManageJumpAndGravity() { }
-    
-    protected virtual  void Die() {}
-    
-    
+    protected virtual void ManageMovement()
+    {
+    }
+
+    protected virtual void ManageJumpAndGravity()
+    {
+    }
+
+    protected virtual void Die()
+    {
+        // Animazione
+        animator.SetBool(IsDead, true);
+
+        // per sicurezza resetto il colore prima di distruggere l'oggetto
+        //changeColorMaterial.ResetColor();
+    }
+
+
     #region FixedStatus
-    
+
     private void TakeDamage(int damage)
     {
         // Se il danno è non positivo esco
-        if (damage <= 0)
+        if (damage <= 0 || animator.GetBool(IsDead))
             return;
 
         // scala il danno preso in base all'armatura del personaggio
@@ -136,23 +177,24 @@ public class GameCharacterController : MonoBehaviour
             damage = 1;
 
         // cambio il colore
-        if(flashWhenHit)
+        if (flashWhenHit)
             _changeColorMaterial.FlashColor();
-        
-        
+
+
         // Scalo gli hp in baso al danno preso
         _myStats.hp -= damage;
 
         // update the health bar
         if (_healtBarControllerScript != null)
             _healtBarControllerScript.TakeDamage(damage);
-        
+
         // Se gli hp sono non positivi, lancio la gestione della morte
         if (_myStats.hp <= 0)
             Die();
     }
-    
-    public void TakeHitPoints(int bonusHp) {
+
+    public void TakeHitPoints(int bonusHp)
+    {
         // Se sono full esco
         if (_myStats.hp == _myStats.maxHp)
             return;
@@ -161,17 +203,18 @@ public class GameCharacterController : MonoBehaviour
         if (_myStats.hp + bonusHp > _myStats.maxHp)
             // imposto il bonus come la differenza fra la vita massima e la vita attuale
             bonusHp = _myStats.maxHp - _myStats.hp;
-        
+
         // aggiorno la vita attuale col bonus
         _myStats.hp += bonusHp;
-        
+
         // Aggiorno la barra della vita
         if (_healtBarControllerScript != null)
             _healtBarControllerScript.RestoreHealt(bonusHp);
     }
 
 
-    public void UpgradeArmour(int bonusArmour) {
+    public void UpgradeArmour(int bonusArmour)
+    {
         _myStats.armour += bonusArmour;
     }
 
@@ -179,19 +222,29 @@ public class GameCharacterController : MonoBehaviour
     {
         _myStats.damage += bonusDamange;
     }
+
     #endregion
 
     #region TemporaneousStatus
-    public IEnumerator TemporaneousDamageBuff(int bonusDamage, int seconds) {
+
+    public IEnumerator TemporaneousDamageBuff(int bonusDamage, int seconds)
+    {
         _myStats.damage += bonusDamage;
         yield return Waiter.Active(seconds);
         _myStats.damage -= bonusDamage;
     }
 
-    public IEnumerator TemporaneousArmourBuff(int bonusArmour, int seconds) {
+    public IEnumerator TemporaneousArmourBuff(int bonusArmour, int seconds)
+    {
         _myStats.armour += bonusArmour;
         yield return Waiter.Active(seconds);
         _myStats.armour -= bonusArmour;
     }
+
+    public virtual IEnumerator TemporaneousSpeedBuff(int bonusSpeed, int seconds)
+    {
+        yield return null;
+    }
+
     #endregion
 }

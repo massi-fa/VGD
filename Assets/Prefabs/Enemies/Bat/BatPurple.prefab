@@ -1228,8 +1228,9 @@ MonoBehaviour:
   flashWhenHit: 1
   isAnimated: 1
   lookRadius: 10
-  maxDistanceForMeleeAttack: 2
-  _deadAnimationTime: 0
+  maxDistanceForMeleeAttack: 1.83
+  hasRangedAttacks: 0
+  maxDistanceForRangedAttack: 0
 --- !u!195 &1700883935452218439
 NavMeshAgent:
   m_ObjectHideFlags: 0
