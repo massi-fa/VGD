@@ -32,9 +32,6 @@ public class ProtagonistController : GameCharacterController
     [Tooltip("Potenza dello scatto")] 
     public float dashForce = 5f;
 
-    /*[Tooltip("Frequenza aggiornamento dash\n(25 è un buon valore)")]
-    public float dashSmoothTime = 25f;*/
-
     [Tooltip("Ogni quanti secondi si può effettuare il dash (scatto)")]
     public float dashCountDown = 3f;
 

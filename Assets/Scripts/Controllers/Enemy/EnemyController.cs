@@ -24,6 +24,7 @@ namespace Controllers.Enemy
         private static readonly int Melee = Animator.StringToHash("Melee");
         private static readonly int Distance = Animator.StringToHash("Distance");
 
+        private Boss _bossReference;
         // Start is called before the first frame update
         protected override void Start()
         {
@@ -35,7 +36,7 @@ namespace Controllers.Enemy
             // Inizializza nav agent variable e crea un nuovo nev mesh path
             _navigationMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshPath = new NavMeshPath();
-
+            _bossReference = GetComponent<Boss>();
             // Traccio il player
             _playerTransform = PlayerTracker.instance.player.transform;
 
@@ -169,6 +170,10 @@ namespace Controllers.Enemy
         protected override void Die()
         {
             base.Die();
+            
+            // Se è un boss, sblocca il trofeo
+            if(_bossReference != null)
+                _bossReference.UnlockTrophy();
             
             // Distruggi il gameobject
             Destroy(gameObject, deadAnimationTime);
